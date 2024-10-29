@@ -83,3 +83,29 @@ Comunicación entre Agentes: Aunque los agentes no son llamados directamente, la
 
 # Punto 3
 
+-Codigo: Es el archivo calcu_kot.kt
+
+-INFO:
+
+## Encapsulamiento
+El encapsulamiento es cuando escondemos los detalles internos de una clase y solo mostramos lo que es necesario. En mi calculadora:
+
+Clases y Métodos: La clase Calculadora tiene las operaciones básicas como suma, resta, multiplicación y división. Luego, CalculadoraCientifica hereda de esta clase y añade funciones avanzadas como seno y logaritmos. Esto ayuda a que los usuarios solo vean lo que necesitan.
+
+Propiedades Privadas: La variable memoria en CalculadoraCientifica es privada. Solo se puede acceder a ella mediante métodos específicos (como memoriaSumar y memoriaRestar). Esto evita que alguien cambie la memoria sin querer.
+
+Manejo de Excepciones: En los métodos, añadí excepciones para manejar errores, como la división por cero. Así, si el usuario intenta dividir entre cero, recibe un mensaje claro explicando el problema.
+
+## Herencia
+
+La herencia es cuando una clase nueva se basa en una clase existente, lo que nos permite reutilizar código.
+
+Clase Base y Derivada: La clase Calculadora es la base y CalculadoraCientifica es la clase derivada que añade funciones científicas. Esto significa que no tengo que reescribir el código de las operaciones básicas; simplemente las uso en la clase derivada.
+
+## Polimorfismo
+
+El polimorfismo permite que un método funcione de diferentes maneras dependiendo del contexto.
+
+Sobrecarga de Métodos: Aunque no lo implementé en este código, podría hacer que el método suma acepte tanto números enteros como decimales. Así, el usuario puede usar el mismo método sin preocuparse por el tipo de dato.
+
+Flexibilidad en el Uso de Funciones: Los métodos en CalculadoraCientifica permiten a los usuarios hacer cálculos avanzados como seno y logaritmo sin tener que saber cómo funcionan por dentro. Esto hace que la calculadora sea fácil de usar.
