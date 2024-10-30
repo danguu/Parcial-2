@@ -21,22 +21,46 @@ class PotenciaAgent:
     def operar(self, a, b):
         return a ** b
 
-class Calculadora:
-    def __init__(self):
+class Mesa:
+    def _init_(self):
         # Crear los "agentes" que harán las operaciones
-        self.suma_agent = SumaAgent()
-        self.resta_agent = RestaAgent()
-        self.multiplicacion_agent = MultiplicacionAgent()
-        self.division_agent = DivisionAgent()
-        self.potencia_agent = PotenciaAgent()
+        self.agentes = {
+            '+': SumaAgent(),
+            '-': RestaAgent(),
+            '*': MultiplicacionAgent(),
+            '/': DivisionAgent(),
+            '**': PotenciaAgent()
+        }
+
+    def delegar_operacion(self, operador, a, b):
+        if operador in self.agentes:
+            return self.agentes[operador].operar(a, b)
+        else:
+            return "Operador no soportado"
+
+class Calculadora:
+    def _init_(self):
+        # Crear la mesa para delegar las operaciones
+        self.mesa = Mesa()
 
     def calcular(self, expresion):
         try:
-            # Evalúa la expresión matemática ingresada
-            resultado = eval(expresion)
-            return resultado
+            # Dividir la expresión en operandos y operador
+            elementos = expresion.split()
+            if len(elementos) == 3:
+                a = float(elementos[0])
+                operador = elementos[1]
+                b = float(elementos[2])
+                
+                # Delegar la operación en la mesa
+                resultado = self.mesa.delegar_operacion(operador, a, b)
+                return resultado
+            else:
+                return "Error: Expresión inválida. Usa el formato 'a operador b'"
+        except ValueError:
+            return "Error: Entrada inválida. Asegúrate de usar números."
         except Exception as e:
-            return "Error en la expresión"
+            return f"Error en la expresión: {e}"
 
 # Función principal que interactúa con el usuario
 def ejecutar_calculadora():
@@ -52,5 +76,5 @@ def ejecutar_calculadora():
         print(f"Resultado: {resultado}")
 
 # Ejecutar la calculadora
-if __name__ == "__main__":
+if _name_ == "_main_":
     ejecutar_calculadora()
