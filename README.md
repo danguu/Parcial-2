@@ -39,47 +39,67 @@ También noté que los parámetros, como la tasa de aprendizaje y el número de 
 
 -Codigo: Es el archivo llamado calcu_agentes.py
 
--Función:
+## Función:En este código, cada agente se especializa en una operación matemática, y la comunicación consiste en asignar cada cálculo a su agente correspondiente.
 
-Agentes de Operación: Se definen cinco clases (SumaAgent, RestaAgent, MultiplicacionAgent, DivisionAgent, PotenciaAgent). Cada clase tiene un método operar que realiza una operación matemática específica.
+## Selección de Operación y Agente:
 
-Clase Calculadora: La clase Calculadora crea instancias de cada agente en su constructor (__init__). Esto permite que la calculadora use estos agentes para realizar operaciones.
+Cuando el usuario ingresa una expresión en el formato a operador b, la calculadora recibe el operador (por ejemplo, +, -, *, /, o **).
 
-Método Calcular: La calculadora tiene un método calcular que evalúa una expresión matemática que el usuario ingresa.
+La calculadora identifica el tipo de operación y el agente correspondiente en función del operador. Por ejemplo, si el operador es +, el agente de suma (suma_agent) se selecciona para realizar la operación.
 
-Utiliza eval() para resolver la expresión directamente, aunque esto puede ser riesgoso por razones de seguridad.
-Interacción con el Usuario: En la función ejecutar_calculadora, el usuario puede ingresar expresiones repetidamente. La calculadora toma cada expresión, la evalúa y muestra el resultado.
+## Delegación de Operación:
+
+Una vez seleccionado, el agente específico se encarga de procesar los operandos (a y b).
+
+Cada agente tiene un método operar que aplica la operación definida (por ejemplo, suma_agent suma a y b, resta_agent los resta, etc.).
+
+## Ejecución de la Operación y Comunicación del Resultado:
+
+El agente ejecuta la operación y devuelve el resultado a la calculadora principal (CalculadoraModel), que luego imprime el resultado para el usuario.
+
+Si hay un error (como división por cero), el agente devuelve un mensaje de error.
 
 -INFO: 
-## Estructura del Sistema-
-El sistema tiene tres partes principales:
 
-Agentes: Cada agente es una clase que se encarga de una operación matemática. Por ejemplo, hay un agente para sumar, otro para restar, y así sucesivamente.
-Calculadora: Esta clase es la que coordina todo. Crea los agentes y se encarga de recibir la expresión matemática que el usuario ingresa.
-Interfaz de Usuario: Un bucle que permite al usuario escribir operaciones y ver los resultados.
-## Agentes
+## Componentes del Sistema-
+El sistema tiene dos partes principales:
 
-Los agentes son clases que tienen un método llamado operar. Este método toma dos números y devuelve el resultado de la operación. Por ejemplo:
+OperacionAgent: Esta clase representa a cada agente. Cada agente tiene una operación específica:
 
-SumaAgent: Suma dos números.
+Suma
+Resta
+Multiplicación
+División
+Potencia
 
-RestaAgent: Resta dos números.
+Cada agente tiene un método operar, que hace el cálculo para su operación (como sumar o multiplicar dos números).
 
-MultiplicacionAgent: Multiplica dos números.
+CalculadoraModel: Este es el modelo central que coordina a los agentes y maneja el flujo de la calculadora. En este modelo se crean los agentes, y él es el que envía los números y la operación al agente correcto.
 
-DivisionAgent: Divide dos números (previniendo la división por cero).
+## Funcionamiento del Sistema
+Entrada del Usuario: El usuario escribe una expresión como "5 + 3". La calculadora separa el primer número (5), el operador (+) y el segundo número (3).
 
-PotenciaAgent: Calcula un número elevado a otro.
+Selección del Agente: CalculadoraModel revisa el operador (+) y elige el agente de suma para realizar la operación. Si el operador fuera -, elegiría el agente de resta, y así sucesivamente.
 
-## Clase Calculadora
+Cálculo: El agente seleccionado toma los dos números y realiza la operación. Luego, devuelve el resultado al modelo, y la calculadora muestra el resultado al usuario.
 
-La clase Calculadora crea los agentes en su constructor. Luego, tiene un método calcular que utiliza la función eval para evaluar la expresión que el usuario ingresa. Si hay un error, muestra un mensaje de error.
+## Comunicación entre Componentes-
+La comunicación es simple. CalculadoraModel se encarga de todo:
 
-## Interacción
+Decide qué agente usar según la operación ingresada.
 
-La función ejecutar_calculadora permite al usuario ingresar operaciones. La calculadora procesa la operación y devuelve el resultado
+Envía los números y la operación al agente elegido.
 
-Comunicación entre Agentes: Aunque los agentes no son llamados directamente, la calculadora actúa como un intermediario que organiza y ejecuta las operaciones.
+Recibe el resultado y lo muestra al usuario.
+
+No hay mensajes complicados entre los agentes; cada agente funciona de manera independiente y solo realiza su operación cuando CalculadoraModel lo llama.
+
+## Manejo de Errores-
+Hay un manejo básico de errores:
+
+Si el usuario intenta dividir por cero, el agente de división devuelve un mensaje de error.
+
+La calculadora también intenta manejar otros errores, como si el usuario ingresa algo que no puede calcular.
 
 # Punto 3
 
