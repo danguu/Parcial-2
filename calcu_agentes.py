@@ -1,80 +1,76 @@
-class SumaAgent:
+from mesa import Agent, Model
+from mesa.time import BaseScheduler
+
+class OperacionAgent(Agent):
+    def __init__(self, unique_id, model, operation):
+        super().__init__(unique_id, model)
+        self.operation = operation
+
     def operar(self, a, b):
-        return a + b
-
-class RestaAgent:
-    def operar(self, a, b):
-        return a - b
-
-class MultiplicacionAgent:
-    def operar(self, a, b):
-        return a * b
-
-class DivisionAgent:
-    def operar(self, a, b):
-        if b != 0:
-            return a / b
-        else:
-            return "Error: No se puede dividir por cero"
-
-class PotenciaAgent:
-    def operar(self, a, b):
-        return a ** b
-
-class Mesa:
-    def _init_(self):
-        # Crear los "agentes" que harán las operaciones
-        self.agentes = {
-            '+': SumaAgent(),
-            '-': RestaAgent(),
-            '*': MultiplicacionAgent(),
-            '/': DivisionAgent(),
-            '**': PotenciaAgent()
-        }
-
-    def delegar_operacion(self, operador, a, b):
-        if operador in self.agentes:
-            return self.agentes[operador].operar(a, b)
-        else:
-            return "Operador no soportado"
-
-class Calculadora:
-    def _init_(self):
-        # Crear la mesa para delegar las operaciones
-        self.mesa = Mesa()
-
-    def calcular(self, expresion):
-        try:
-            # Dividir la expresión en operandos y operador
-            elementos = expresion.split()
-            if len(elementos) == 3:
-                a = float(elementos[0])
-                operador = elementos[1]
-                b = float(elementos[2])
-                
-                # Delegar la operación en la mesa
-                resultado = self.mesa.delegar_operacion(operador, a, b)
-                return resultado
+        if self.operation == 'suma':
+            return a + b
+        elif self.operation == 'resta':
+            return a - b
+        elif self.operation == 'multiplicacion':
+            return a * b
+        elif self.operation == 'division':
+            if b != 0:
+                return a / b
             else:
-                return "Error: Expresión inválida. Usa el formato 'a operador b'"
-        except ValueError:
-            return "Error: Entrada inválida. Asegúrate de usar números."
-        except Exception as e:
-            return f"Error en la expresión: {e}"
+                return "Error: No se puede dividir por cero"
+        elif self.operation == 'potencia':
+            return a ** b
 
-# Función principal que interactúa con el usuario
+class CalculadoraModel(Model):
+    def __init__(self):
+        self.schedule = BaseScheduler(self)
+        # Crear agentes para cada operación
+        self.suma_agent = OperacionAgent(1, self, 'suma')
+        self.resta_agent = OperacionAgent(2, self, 'resta')
+        self.multiplicacion_agent = OperacionAgent(3, self, 'multiplicacion')
+        self.division_agent = OperacionAgent(4, self, 'division')
+        self.potencia_agent = OperacionAgent(5, self, 'potencia')
+        # Añadir agentes al planificador
+        self.schedule.add(self.suma_agent)
+        self.schedule.add(self.resta_agent)
+        self.schedule.add(self.multiplicacion_agent)
+        self.schedule.add(self.division_agent)
+        self.schedule.add(self.potencia_agent)
+
+    def calcular(self, operacion, a, b):
+        # Determinar el agente según la operación
+        if operacion == '+':
+            return self.suma_agent.operar(a, b)
+        elif operacion == '-':
+            return self.resta_agent.operar(a, b)
+        elif operacion == '*':
+            return self.multiplicacion_agent.operar(a, b)
+        elif operacion == '/':
+            return self.division_agent.operar(a, b)
+        elif operacion == '**':
+            return self.potencia_agent.operar(a, b)
+        else:
+            return "Operación no válida"
+
+# Función principal para interactuar con el usuario
 def ejecutar_calculadora():
-    calculadora = Calculadora()
+    calculadora = CalculadoraModel()
 
     while True:
-        expresion = input("Ingresa una operación (o 'salir' para terminar): ")
+        expresion = input("Ingresa una operación (formato: a operador b, o 'salir' para terminar): ")
         if expresion.lower() == 'salir':
             break
         
-        # La calculadora resuelve la expresión matemática
-        resultado = calculadora.calcular(expresion)
-        print(f"Resultado: {resultado}")
+        try:
+            a, operacion, b = expresion.split()
+            a, b = float(a), float(b)
+            resultado = calculadora.calcular(operacion, a, b)
+            print(f"Resultado: {resultado}")
+        except ValueError:
+            print("Error: formato de entrada no válido")
+        except Exception as e:
+            print(f"Error en la expresión: {e}")
 
 # Ejecutar la calculadora
-if _name_ == "_main_":
+if __name__ == "__main__":
     ejecutar_calculadora()
